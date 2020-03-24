@@ -49,6 +49,8 @@ def get_winner(tictactoe_board):
 def move_is_valid(state,action):
     action_board = action // 9
     action_pos = action %9
+    current_board = state['current_board']
+    
 
     if(current_board == -1):
         # check if the spot is open
@@ -67,10 +69,10 @@ def move_is_valid(state,action):
 
 # return a mask of valid moves
 def get_valid_moves(state):
-    return [1 for x in range(81) if move_is_valid(state,x)]
+    return [1  if move_is_valid(state,x) else 0 for x in range(81)]
     
 
-def next_state(state,action):
+def step(state,action):
     # assume action is a number 0-80
     # for the position of the 
     action_board = action // 9
@@ -96,7 +98,7 @@ def next_state(state,action):
     if(state['winners'][action_board] != -1):
         state['current_board'] = -1
     else:
-        state['current_board'] = action
+        state['current_board'] = action_pos
     return state
 
 # agents will decide how to make actions
@@ -108,9 +110,7 @@ def pretty_print_board(board,selected):
             1: " O"
     }
     board = [character_map[x] for x in board]
-    print(board)
     result_string = []
-    print("pretty board:",board)
     # regular tictactoe printout
     # put a line of buffer around the board
     # print out top row
